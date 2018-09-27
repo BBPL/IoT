@@ -3,13 +3,28 @@ import socket
 import machine
 import os
 
-def connect(wlan,ip = "192.168.0.55"):
+wlan = WLAN(mode=WLAN.STA)
+
+def wifiSetup(name,pwd):
+    
+    nets = wlan.scan()
+
+    for net in nets:
+        print(net.ssid)
+        if net.ssid == name:
+            print('Network found!')
+            wlan.connect(net.ssid, auth=(net.sec, pwd), timeout=5000)
+            while not wlan.isconnected():
+                machine.idle() # save power while waiting
+            print('WLAN connection succeeded!')
+            break
+
+def connect(ip = "192.168.0.55",port =80):
     
     if wlan.isconnected():
         client = socket.socket()
         address = ip
-        port = 5000
-        ai = socket.getaddrinfo(ip, 5000)
+        ai = socket.getaddrinfo(ip, port)
         print("Address infos:", ai)
         addr = ai[0][-1]
         print("Connect address:", addr)
@@ -34,3 +49,4 @@ def connect(wlan,ip = "192.168.0.55"):
 def testcon():
     a = os.system("ping -c 1 192.168.0.55:8000")
     print(a)
+
