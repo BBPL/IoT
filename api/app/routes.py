@@ -1,6 +1,7 @@
-from flask import render_template
+from flask import render_template,request
 from app import app,db
 from app.models import Satellite
+import json
 
 @app.route("/")
 def hello():
@@ -25,3 +26,21 @@ def connectSatellite(ip,port,name):
         return("added!")
     return("nope!")
         
+@app.route("/connect",methods=['POST','GET'])
+def connect():
+    print(request.method)
+
+    if request.method == 'POST':
+        return connectPOST(request)
+    elif request.method == 'GET':
+        return connectGET(request)
+    else:
+        return render_template('home.html',name="marek")
+
+def connectPOST(request):
+    if not request.json:
+        return "wrong"
+    print(request.json)
+    return json.dumps(request.json)
+def connectGET(request):
+    return request.method
