@@ -8,7 +8,7 @@ import code
 #wifiSetup (name, pwd)
 code.wifiSetup("Indbrudstyven", "spotspot")
 
-code.connect()
+code.connect("192.168.43.128",5000)
 
 
 
